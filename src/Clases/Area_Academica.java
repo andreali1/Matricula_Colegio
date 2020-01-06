@@ -166,30 +166,6 @@ public class Area_Academica {
         }
     }
     
-    /*
-    
-    public boolean dni_validar(String num){ 
-        try
-        {   
-            Instruccion = conexion.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            Registro = Instruccion.executeQuery("SELECT Tipo FROM Area_Academica WHERE Dni =\'"+N+"\' AND Clave =\'"+P+"\'" );
-            Registro.next();
-            String tipo = Registro.getString("Tipo"); 
-            if(!tipo.equals("")){ 
-                return tipo; 
-            }else{
-                JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrectos"); 
-                return ""; 
-            }
-        }
-        catch(Exception X){ 
-            JOptionPane.showMessageDialog(null, "Usuario y/o contraseña incorrectos"); 
-            System.out.println(X.getMessage()); 
-            return "";
-        }
-    }
-    */
-    
     public DefaultTableModel tabla(){
         DefaultTableModel modelo= new DefaultTableModel(){
             @Override
@@ -256,6 +232,45 @@ public class Area_Academica {
             System.out.println(ex.getMessage());
         }
         return modelo;
+    }
+    
+    public boolean dni_validar(String num){ 
+        try
+        {   
+            Instruccion = conexion.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Registro = Instruccion.executeQuery("SELECT count(*) cant from Area_Academica WHERE Dni =\'"+num+"\'" );
+            Registro.next();
+            int cant = Registro.getInt("cant"); 
+            if(cant == 0){ 
+                return false; 
+            }else{
+                return true; 
+            }
+        }
+        catch(Exception X){ 
+            System.out.println(X.getMessage()); 
+            return false;
+        }
+    }
+    
+    public String dni_obtener(int cod){ 
+        try
+        {   
+            Instruccion = conexion.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Registro = Instruccion.executeQuery("SELECT coalesce(Dni, '') Dni from Area_Academica WHERE Id_Areaacademica =\'"+cod+"\'" );
+            Registro.next();
+            String nroDni = Registro.getString("Dni"); 
+            System.out.println("dni "+ nroDni);
+            if(nroDni.equals("")){ 
+                return ""; 
+            }else{
+                return nroDni; 
+            }
+        }
+        catch(Exception X){ 
+            System.out.println(X.getMessage()); 
+            return "";
+        }
     }
 
     public void Insertar(){

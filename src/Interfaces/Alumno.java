@@ -20,12 +20,11 @@ public class Alumno extends javax.swing.JDialog {
     /**
      * Creates new form AreaAcademica
      */
-    
     int cod;
     String dni, nom, ape, tel, direc, email, cargo, tip, pass, sex, fenac, est;
     boolean validacion;
-    String []datosArea = null;
-    
+    String[] datosArea = null;
+
     Clases.Alumno alu = null;
 
     public Alumno() {
@@ -35,22 +34,23 @@ public class Alumno extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         // Incializar variables
         cod = 0;
         dni = nom = ape = tel = direc = email = cargo = tip = pass = sex = fenac = est = "";
         datosArea = new String[13];
         datFenac.setDate(new java.util.Date());
-        
+        validacion = false;
+
         // Instacias
         alu = new Clases.Alumno();
-        
+
         // Funciones
         sexo();
         tabla_cargar();
-        
+
         btnEliminar.setEnabled(false);
-        
+
     }
 
     /**
@@ -120,6 +120,7 @@ public class Alumno extends javax.swing.JDialog {
 
             }
         ));
+        tabla.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jScrollPane1.setViewportView(tabla);
 
         jLabel12.setText("Buscar Registros");
@@ -380,7 +381,6 @@ public class Alumno extends javax.swing.JDialog {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -444,7 +444,8 @@ public class Alumno extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         validacion = validar();
-        if(validacion){
+        System.out.println("validacion " + validacion);
+        if (validacion) {
             alu.setIdAlumno(cod);
             alu.setDni(dni);
             alu.setApellidos(ape);
@@ -457,19 +458,18 @@ public class Alumno extends javax.swing.JDialog {
             alu.setSexo(sex);
             alu.setDireccion(direc);
             alu.setEstado(est);
-            
-            if(cod == 0){
+
+            if (cod == 0) {
                 alu.Insertar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
-            }else{
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
+            } else {
                 alu.Modificar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
             }
-            
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -477,14 +477,14 @@ public class Alumno extends javax.swing.JDialog {
         // TODO add your handling code here:
         try {
             int fila = tabla.getSelectedRow();
-            
-            if(fila!=-1){
-                
+
+            if (fila != -1) {
+
                 limpiar();
-                
+
                 cod = Integer.valueOf(tabla.getValueAt(fila, 0).toString());
                 datosArea = alu.Obtener(cod);
-                
+
                 txtNombres.setText(datosArea[0]);
                 txtApellidos.setText(datosArea[1]);
                 txtTelefono.setText(datosArea[2]);
@@ -492,32 +492,32 @@ public class Alumno extends javax.swing.JDialog {
                 txtDni.setText(datosArea[4]);
                 txtClave.setText(datosArea[5]);
                 txtDireccion.setText(datosArea[8]);
-                
-                switch(datosArea[9]){
+
+                switch (datosArea[9]) {
                     case "ACTIVO":
                         cboEstado.setSelectedIndex(0);
-                    break;
+                        break;
                     case "RETIRADO":
                         cboEstado.setSelectedIndex(1);
-                    break;
+                        break;
                     default:
                         cboEstado.setSelectedIndex(0);
-                    break;
+                        break;
                 }
-                
+
                 datFenac.setDate(Date.valueOf(datosArea[7]));
-                if(datosArea[6].equals("MASCULINO")){
+                if (datosArea[6].equals("MASCULINO")) {
                     groupSexo.setSelected(rbtnMasculino.getModel(), true);
-                }else if(datosArea[6].equals("FEMENINO")){
+                } else if (datosArea[6].equals("FEMENINO")) {
                     groupSexo.setSelected(rbtnFemenino.getModel(), true);
                 }
-                
+
                 btnEliminar.setEnabled(true);
-            }else{
-                JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            } else {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -529,8 +529,8 @@ public class Alumno extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        int eliminar = JOptionPane.showConfirmDialog(null,"¿Desea cerrar sesión?");
-        if(eliminar == 0){
+        int eliminar = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?");
+        if (eliminar == 0) {
             System.out.println(cod);
             alu.Eliminar(cod);
             tabla_cargar();
@@ -541,11 +541,20 @@ public class Alumno extends javax.swing.JDialog {
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
         tabla_cargar();
+        busDni.setText("");
+        busNombres.setText("");
+        busApellidos.setText("");
+
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         tabla.setModel(alu.Buscar(busDni.getText(), busNombres.getText(), busApellidos.getText()));
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(50);
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(50);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
@@ -591,16 +600,23 @@ public class Alumno extends javax.swing.JDialog {
         });
     }
 
-    public void tabla_cargar(){
+    public void tabla_cargar() {
         tabla.setModel(alu.tabla());
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(50);
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(50);
+        //JTable.getColumnModel().getColumn(0).setPreferredWidth(100);
     }
-    
-    public void sexo(){
+
+    public void sexo() {
         groupSexo.add(rbtnMasculino);
         groupSexo.add(rbtnFemenino);
     }
-    
-    public boolean validar(){
+
+    public boolean validar() {
+        System.out.println("Entramos a validar");
         dni = txtDni.getText();
         nom = txtNombres.getText();
         ape = txtApellidos.getText();
@@ -610,55 +626,102 @@ public class Alumno extends javax.swing.JDialog {
         est = cboEstado.getSelectedItem().toString();
         pass = txtClave.getText();
         sex = "";
-  
-        String pattern  = "yyyy-MM-dd";
-        DateFormat formatter = new SimpleDateFormat(pattern);
-        fenac = formatter.format(datFenac.getDate());
-        
-        if(rbtnMasculino.isSelected()){
+
+        try {
+            String pattern = "yyyy-MM-dd";
+            DateFormat formatter = new SimpleDateFormat(pattern);
+            fenac = formatter.format(datFenac.getDate());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Fecha Invalida");
+            return false;
+        }
+
+        if (rbtnMasculino.isSelected()) {
             sex = "MASCULINO";
-        }else if(rbtnFemenino.isSelected()){
+        } else if (rbtnFemenino.isSelected()) {
             sex = "FEMENINO";
         }
 
-        if(dni.equals("") || dni.length()!=8){
-            JOptionPane.showMessageDialog(null, "Dni incorrecto"); 
-            return false;
-        }else if(nom.equals("")){
-            JOptionPane.showMessageDialog(null, "Nombres incorrectos"); 
-            return false;
-        }else if(ape.equals("")){
-            JOptionPane.showMessageDialog(null, "Apellidos incorrectos"); 
-            return false;
-        }else if(tel.equals("")){
-            JOptionPane.showMessageDialog(null, "Telefono incorrecto"); 
-            return false;
-        }else if(fenac.equals("")){
-            JOptionPane.showMessageDialog(null, "Fecha de Nacimiento incorrecto"); 
-            return false;
-        }else if(direc.equals("")){
-            JOptionPane.showMessageDialog(null, "Dirección incorrecto"); 
-            return false;
-        }else if(email.equals("")){
-            JOptionPane.showMessageDialog(null, "Email incorrecto"); 
-            return false;
-        }else if(sex.equals("")){
-            JOptionPane.showMessageDialog(null, "Sexo no seleccionado"); 
-            return false;
-        }else if(pass.equals("")){
-            JOptionPane.showMessageDialog(null, "Contraseña incorrecta"); 
-            return false;
-        }else if(datFenac.getDate() == null){
-            JOptionPane.showMessageDialog(null, "Fecha incorrecta"); 
+        if (dni.equals("") || dni.length() != 8 || dniIsNumero(dni)) {
+            System.err.println("Veamos si esta vacio");
+            JOptionPane.showMessageDialog(null, "Dni incorrecto");
             return false;
         }
+        if (cod == 0) {
+            if (alu.dni_validar(dni)) {
+                System.out.println("valida 1");
+                JOptionPane.showMessageDialog(null, "Dni Ya Registrado");
+                return false;
+            }
+        } else {
+            if (alu.dni_validar(dni)) {
+                System.out.println("valida 2");
+                if (!(dni.equals(alu.dni_obtener(cod)))) {
+                    System.out.println("Compara");
+                    if (alu.dni_validar(dni)) {
+                        System.out.println("valida 3");
+                        JOptionPane.showMessageDialog(null, "Dni Ya Registrado");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (nom.equals("")) {
+            System.out.println("valida nom");
+            JOptionPane.showMessageDialog(null, "Nombres incorrectos");
+            return false;
+        }
+
+        if (ape.equals("")) {
+            System.out.println("valida ape");
+            JOptionPane.showMessageDialog(null, "Apellidos incorrectos");
+            return false;
+        }
+
+        if (tel.equals("")) {
+            JOptionPane.showMessageDialog(null, "Telefono incorrecto");
+            return false;
+        }
+
+        if (sex.equals("")) {
+            JOptionPane.showMessageDialog(null, "Sexo no seleccionado");
+            return false;
+        }
+
+        if (fenac.equals("")) {
+            JOptionPane.showMessageDialog(null, "Fecha de Nacimiento incorrecto");
+            return false;
+        }
+
+        if (datFenac.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Fecha incorrecta");
+            return false;
+        }
+
+        if (direc.equals("")) {
+            JOptionPane.showMessageDialog(null, "Dirección incorrecto");
+            return false;
+        }
+
+        if (email.equals("")) {
+            JOptionPane.showMessageDialog(null, "Email incorrecto");
+            return false;
+        }
+
+        if (pass.equals("")) {
+            JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
+            return false;
+        }
+
         return true;
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         cod = 0;
         dni = nom = ape = tel = direc = email = cargo = tip = pass = sex = fenac = est = "";
-    
+        validacion = false;
+
         txtDni.setText("");
         txtNombres.setText("");
         txtApellidos.setText("");
@@ -669,10 +732,19 @@ public class Alumno extends javax.swing.JDialog {
         txtClave.setText("");
         groupSexo.clearSelection();
         datFenac.setDate(new java.util.Date());
-        
+
         btnEliminar.setEnabled(false);
     }
-    
+
+    public boolean dniIsNumero(String dni) {
+        try {
+            long num = Long.valueOf(dni);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;

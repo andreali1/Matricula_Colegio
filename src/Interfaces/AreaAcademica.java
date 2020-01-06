@@ -20,12 +20,11 @@ public class AreaAcademica extends javax.swing.JDialog {
     /**
      * Creates new form AreaAcademica
      */
-    
     int cod;
     String dni, nom, ape, tel, direc, email, cargo, tip, pass, sex, fenac, est;
     boolean validacion;
-    String []datosArea = null;
-    
+    String[] datosArea = null;
+
     Clases.Area_Academica area = null;
 
     public AreaAcademica() {
@@ -35,20 +34,24 @@ public class AreaAcademica extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         // Incializar variables
         cod = 0;
         dni = nom = ape = tel = direc = email = cargo = tip = pass = sex = fenac = est = "";
+        validacion = false;
+
         datosArea = new String[13];
         datFenac.setDate(new java.util.Date());
-        
+
         // Instacias
         area = new Clases.Area_Academica();
+
+        btnEliminar.setEnabled(false);
         
         // Funciones
         sexo();
         tabla_cargar();
-        
+
     }
 
     /**
@@ -459,8 +462,9 @@ public class AreaAcademica extends javax.swing.JDialog {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
+        
         validacion = validar();
-        if(validacion){
+        if (validacion) {
             area.setIdArea(cod);
             area.setDni(dni);
             area.setApellidos(ape);
@@ -475,21 +479,19 @@ public class AreaAcademica extends javax.swing.JDialog {
             area.setSexo(sex);
             area.setDireccion(direc);
             area.setEstado(est);
-            
-            if(cod == 0){
+
+            if (cod == 0) {
                 area.Insertar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
-            }else{
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
+            } else {
                 area.Modificar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
             }
-            
-        }else{
-            JOptionPane.showMessageDialog(null, "Datos Incorrectos");
+
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -497,14 +499,14 @@ public class AreaAcademica extends javax.swing.JDialog {
         // TODO add your handling code here:
         try {
             int fila = tabla.getSelectedRow();
-            
-            if(fila!=-1){
-                
+
+            if (fila != -1) {
+
                 limpiar();
-                
+
                 cod = Integer.valueOf(tabla.getValueAt(fila, 0).toString());
                 datosArea = area.Obtener(cod);
-                
+
                 txtNombres.setText(datosArea[0]);
                 txtApellidos.setText(datosArea[1]);
                 txtTelefono.setText(datosArea[2]);
@@ -513,54 +515,53 @@ public class AreaAcademica extends javax.swing.JDialog {
                 txtClave.setText(datosArea[5]);
                 txtCargo.setText(datosArea[8]);
                 txtDireccion.setText(datosArea[10]);
-                
-                                
-                switch(datosArea[9]){
+
+                switch (datosArea[9]) {
                     case "SECRETARIA":
                         cboTipo.setSelectedIndex(0);
-                    break;
+                        break;
                     case "ADMIN":
                         cboTipo.setSelectedIndex(1);
-                    break;
+                        break;
                     case "ALUMNO":
                         cboTipo.setSelectedIndex(2);
-                    break;
+                        break;
                     case "CAJERO":
                         cboTipo.setSelectedIndex(3);
-                    break;
+                        break;
                     case "OTROS":
                         cboTipo.setSelectedIndex(4);
-                    break;
+                        break;
                     default:
                         cboTipo.setSelectedIndex(1);
-                    break;
+                        break;
                 }
-                
-                switch(datosArea[11]){
+
+                switch (datosArea[11]) {
                     case "ACTIVO":
                         cboEstado.setSelectedIndex(0);
-                    break;
+                        break;
                     case "RETIRADO":
                         cboEstado.setSelectedIndex(1);
-                    break;
+                        break;
                     default:
                         cboEstado.setSelectedIndex(0);
-                    break;
+                        break;
                 }
-                
+
                 datFenac.setDate(Date.valueOf(datosArea[7]));
-                if(datosArea[6].equals("MASCULINO")){
+                if (datosArea[6].equals("MASCULINO")) {
                     groupSexo.setSelected(rbtnMasculino.getModel(), true);
-                }else if(datosArea[6].equals("FEMENINO")){
+                } else if (datosArea[6].equals("FEMENINO")) {
                     groupSexo.setSelected(rbtnFemenino.getModel(), true);
                 }
-                
+
                 btnEliminar.setEnabled(true);
-            }else{
-                JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            } else {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -572,8 +573,8 @@ public class AreaAcademica extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        int eliminar = JOptionPane.showConfirmDialog(null,"¿Desea cerrar sesión?");
-        if(eliminar == 0){
+        int eliminar = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?");
+        if (eliminar == 0) {
             area.Eliminar(cod);
             tabla_cargar();
             limpiar();
@@ -583,11 +584,19 @@ public class AreaAcademica extends javax.swing.JDialog {
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
         tabla_cargar();
+        busDni.setText("");
+        busNombres.setText("");
+        busApellidos.setText("");
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         tabla.setModel(area.Buscar(busDni.getText(), busNombres.getText(), busApellidos.getText()));
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(110);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(80);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(60);
+        tabla.getColumnModel().getColumn(6).setPreferredWidth(60);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
@@ -632,16 +641,21 @@ public class AreaAcademica extends javax.swing.JDialog {
         });
     }
 
-    public void tabla_cargar(){
+    public void tabla_cargar() {
         tabla.setModel(area.tabla());
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(110);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(80);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(60);
+        tabla.getColumnModel().getColumn(6).setPreferredWidth(60);
     }
-    
-    public void sexo(){
+
+    public void sexo() {
         groupSexo.add(rbtnMasculino);
         groupSexo.add(rbtnFemenino);
     }
-    
-    public boolean validar(){
+
+    public boolean validar() {
         dni = txtDni.getText();
         nom = txtNombres.getText();
         ape = txtApellidos.getText();
@@ -653,60 +667,105 @@ public class AreaAcademica extends javax.swing.JDialog {
         est = cboEstado.getSelectedItem().toString();
         pass = txtClave.getText();
         sex = "";
-  
-        String pattern  = "yyyy-MM-dd";
-        DateFormat formatter = new SimpleDateFormat(pattern);
-        fenac = formatter.format(datFenac.getDate());
-        
-        if(rbtnMasculino.isSelected()){
+
+        try {
+            String pattern = "yyyy-MM-dd";
+            DateFormat formatter = new SimpleDateFormat(pattern);
+            fenac = formatter.format(datFenac.getDate());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Fecha Invalida");
+            return false;
+        }
+
+        if (rbtnMasculino.isSelected()) {
             sex = "MASCULINO";
-        }else if(rbtnFemenino.isSelected()){
+        } else if (rbtnFemenino.isSelected()) {
             sex = "FEMENINO";
         }
 
-        System.out.println("size "+dni.length());
-        
-        if(dni.equals("") || dni.length()!=8){
-            JOptionPane.showMessageDialog(null, "Dni incorrecto"); 
-            return false;
-        }else if(nom.equals("")){
-            JOptionPane.showMessageDialog(null, "Nombres incorrectos"); 
-            return false;
-        }else if(ape.equals("")){
-            JOptionPane.showMessageDialog(null, "Apellidos incorrectos"); 
-            return false;
-        }else if(tel.equals("")){
-            JOptionPane.showMessageDialog(null, "Telefono incorrecto"); 
-            return false;
-        }else if(fenac.equals("")){
-            JOptionPane.showMessageDialog(null, "Fecha de Nacimiento incorrecto"); 
-            return false;
-        }else if(direc.equals("")){
-            JOptionPane.showMessageDialog(null, "Dirección incorrecto"); 
-            return false;
-        }else if(email.equals("")){
-            JOptionPane.showMessageDialog(null, "Email incorrecto"); 
-            return false;
-        }else if(cargo.equals("")){
-            JOptionPane.showMessageDialog(null, "Cargo incorrecto"); 
-            return false;
-        }else if(sex.equals("")){
-            JOptionPane.showMessageDialog(null, "Sexo no seleccionado"); 
-            return false;
-        }else if(pass.equals("")){
-            JOptionPane.showMessageDialog(null, "Contraseña incorrecta"); 
-            return false;
-        }else if(datFenac.getDate() == null){
-            JOptionPane.showMessageDialog(null, "Fecha incorrecta"); 
+        if (dni.equals("") || dni.length() != 8 || dniIsNumero(dni)) {
+            System.err.println("Veamos si esta vacio");
+            JOptionPane.showMessageDialog(null, "Dni incorrecto");
             return false;
         }
+        if (cod == 0) {
+            if (area.dni_validar(dni)) {
+                System.out.println("valida 1");
+                JOptionPane.showMessageDialog(null, "Dni Ya Registrado");
+                return false;
+            }
+        } else {
+            if (area.dni_validar(dni)) {
+                System.out.println("valida 2");
+                if (!(dni.equals(area.dni_obtener(cod)))) {
+                    System.out.println("Compara");
+                    if (area.dni_validar(dni)) {
+                        System.out.println("valida 3");
+                        JOptionPane.showMessageDialog(null, "Dni Ya Registrado");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (nom.equals("")) {
+            JOptionPane.showMessageDialog(null, "Nombres incorrectos");
+            return false;
+        }
+
+        if (ape.equals("")) {
+            JOptionPane.showMessageDialog(null, "Apellidos incorrectos");
+            return false;
+        }
+
+        if (tel.equals("")) {
+            JOptionPane.showMessageDialog(null, "Telefono incorrecto");
+            return false;
+        }
+
+        if (sex.equals("")) {
+            JOptionPane.showMessageDialog(null, "Sexo no seleccionado");
+            return false;
+        }
+
+        if (fenac.equals("")) {
+            JOptionPane.showMessageDialog(null, "Fecha de Nacimiento incorrecto");
+            return false;
+        }
+
+        if (datFenac.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Fecha incorrecta");
+            return false;
+        }
+
+        if (direc.equals("")) {
+            JOptionPane.showMessageDialog(null, "Dirección incorrecto");
+            return false;
+        }
+
+        if (email.equals("")) {
+            JOptionPane.showMessageDialog(null, "Email incorrecto");
+            return false;
+        }
+
+        if (cargo.equals("")) {
+            JOptionPane.showMessageDialog(null, "Cargo incorrecto");
+            return false;
+        }
+
+        if (pass.equals("")) {
+            JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
+            return false;
+        }
+
         return true;
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         cod = 0;
         dni = nom = ape = tel = direc = email = cargo = tip = pass = sex = fenac = est = "";
-    
+        validacion = false;
+
         txtDni.setText("");
         txtNombres.setText("");
         txtApellidos.setText("");
@@ -719,10 +778,19 @@ public class AreaAcademica extends javax.swing.JDialog {
         txtClave.setText("");
         groupSexo.clearSelection();
         datFenac.setDate(new java.util.Date());
-        
+
         btnEliminar.setEnabled(false);
     }
-    
+
+    public boolean dniIsNumero(String dni) {
+        try {
+            long num = Long.valueOf(dni);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;

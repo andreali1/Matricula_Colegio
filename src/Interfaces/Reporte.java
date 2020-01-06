@@ -17,24 +17,24 @@ public class Reporte extends javax.swing.JDialog {
     /**
      * Creates new form Reporte
      */
-    String aDni, aNom,aApe,pDni,pNom,pApe,mFeini,mFefin;
+    String aDni, aNom, aApe, pDni, pNom, pApe, mFeini, mFefin;
     int mMonto;
-    
+
     Clases.Alumno alu = null;
     Clases.Profesores pro = null;
     Clases.Matricula mat = null;
-    
+
     public Reporte(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
         aDni = aNom = aApe = pDni = pNom = pApe = mFeini = mFefin;
         mMonto = 0;
-        
+
         alu = new Clases.Alumno();
         pro = new Clases.Profesores();
         mat = new Clases.Matricula();
-        
+
         matFeini.setDate(new java.util.Date());
         matFefin.setDate(new java.util.Date());
     }
@@ -342,37 +342,44 @@ public class Reporte extends javax.swing.JDialog {
 
     private void btnMatriculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMatriculaActionPerformed
         // TODO add your handling code here:
-        String pattern  = "yyyy-MM-dd";
+        String pattern = "yyyy-MM-dd";
         DateFormat formatter = new SimpleDateFormat(pattern);
         String ini = formatter.format(matFeini.getDate());
         String fin = formatter.format(matFefin.getDate());
-        
-        System.out.println(ini);
-        System.out.println(fin);
-        
-        if(matMonto.isSelected()){
-            tabla.setModel(mat.Buscar_Monto(aluDni.getText(), aluNom.getText(), aluApe.getText(),ini,fin,proDni.getText(), proNom.getText(), proApe.getText()));
-        }else{
-            tabla.setModel(mat.Buscar_Matricula(aluDni.getText(), aluNom.getText(), aluApe.getText(),ini,fin,proDni.getText(), proNom.getText(), proApe.getText()));
+
+        if (matMonto.isSelected()) {
+            tabla.setModel(mat.Buscar_Monto(aluDni.getText(), aluNom.getText(), aluApe.getText(), ini, fin, proDni.getText(), proNom.getText(), proApe.getText()));
+        } else {
+            tabla.setModel(mat.Buscar_Matricula(aluDni.getText(), aluNom.getText(), aluApe.getText(), ini, fin, proDni.getText(), proNom.getText(), proApe.getText()));
+            tabla.getColumnModel().getColumn(0).setPreferredWidth(1);
+            tabla.getColumnModel().getColumn(1).setPreferredWidth(150);
+            tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
+            tabla.getColumnModel().getColumn(3).setPreferredWidth(20);
+            tabla.getColumnModel().getColumn(4).setPreferredWidth(150);
+            tabla.getColumnModel().getColumn(5).setPreferredWidth(20);
         }
-        
+
     }//GEN-LAST:event_btnMatriculaActionPerformed
 
     private void btnProfesorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProfesorActionPerformed
         // TODO add your handling code here:
         tabla.setModel(pro.Buscar(proDni.getText(), proNom.getText(), proApe.getText()));
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(1);
+
     }//GEN-LAST:event_btnProfesorActionPerformed
 
     private void btnAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlumnoActionPerformed
         // TODO add your handling code here:
         tabla.setModel(alu.Buscar(aluDni.getText(), aluNom.getText(), aluApe.getText()));
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(1);
+
     }//GEN-LAST:event_btnAlumnoActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
         // TODO add your handling code here:
         aDni = aNom = aApe = pDni = pNom = pApe = mFeini = mFefin;
         mMonto = 0;
-        
+
         aluDni.setText("");
         aluNom.setText("");
         aluApe.setText("");
@@ -380,7 +387,7 @@ public class Reporte extends javax.swing.JDialog {
         proNom.setText("");
         proApe.setText("");
         matMonto.setSelected(false);
-        
+
         matFeini.setDate(new java.util.Date());
         matFefin.setDate(new java.util.Date());
     }//GEN-LAST:event_btnLimpiarActionPerformed

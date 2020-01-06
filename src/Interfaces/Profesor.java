@@ -21,12 +21,11 @@ public class Profesor extends javax.swing.JDialog {
     /**
      * Creates new form AreaAcademica
      */
-    
-    int cod,codGra;
+    int cod, codGra;
     String dni, nom, ape, tel, direc, email, cargo, tip, pass, sex, fenac, est, esp;
     boolean validacion;
-    String []datosPro = null;
-    
+    String[] datosPro = null;
+
     ArrayList<String> listaGrado = new ArrayList<String>();
 
     Clases.Profesores pro = null;
@@ -38,21 +37,21 @@ public class Profesor extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         // Incializar variables
         cod = codGra = 0;
         dni = nom = ape = tel = direc = email = cargo = tip = pass = sex = fenac = est = esp = "";
         datosPro = new String[13];
         datFenac.setDate(new java.util.Date());
-        
+
         // Instacias
         pro = new Clases.Profesores();
-        
+
         // Funciones
         sexo();
         tabla_cargar();
         grado();
-        
+
         btnEliminar.setEnabled(false);
     }
 
@@ -474,7 +473,7 @@ public class Profesor extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         validacion = validar();
-        if(validacion){
+        if (validacion) {
             pro.setIdAlumno(cod);
             pro.setIdGrado(codGra);
             pro.setDni(dni);
@@ -489,17 +488,17 @@ public class Profesor extends javax.swing.JDialog {
             pro.setDireccion(direc);
             pro.setEstado(est);
             pro.setEspecialidad(esp);
-            
-            if(cod == 0){
+
+            if (cod == 0) {
                 pro.Insertar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
-            }else{
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
+            } else {
                 pro.Modificar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
             }
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -508,14 +507,14 @@ public class Profesor extends javax.swing.JDialog {
         // TODO add your handling code here:
         try {
             int fila = tabla.getSelectedRow();
-            
-            if(fila!=-1){
-                
+
+            if (fila != -1) {
+
                 limpiar();
-                
+
                 cod = Integer.valueOf(tabla.getValueAt(fila, 0).toString());
                 datosPro = pro.Obtener(cod);
-                
+
                 txtNombres.setText(datosPro[0]);
                 txtApellidos.setText(datosPro[1]);
                 txtTelefono.setText(datosPro[2]);
@@ -524,35 +523,35 @@ public class Profesor extends javax.swing.JDialog {
                 txtClave.setText(datosPro[5]);
                 txtDireccion.setText(datosPro[8]);
                 txtEspecialidad.setText(datosPro[10]);
-                
+
                 codGra = Integer.valueOf(datosPro[11]);
                 seleccionar_grado();
-                
-                switch(datosPro[9]){
+
+                switch (datosPro[9]) {
                     case "ACTIVO":
                         cboEstado.setSelectedIndex(0);
-                    break;
+                        break;
                     case "RETIRADO":
                         cboEstado.setSelectedIndex(1);
-                    break;
+                        break;
                     default:
                         cboEstado.setSelectedIndex(0);
-                    break;
+                        break;
                 }
-                
+
                 datFenac.setDate(Date.valueOf(datosPro[7]));
-                if(datosPro[6].equals("MASCULINO")){
+                if (datosPro[6].equals("MASCULINO")) {
                     groupSexo.setSelected(rbtnMasculino.getModel(), true);
-                }else if(datosPro[6].equals("FEMENINO")){
+                } else if (datosPro[6].equals("FEMENINO")) {
                     groupSexo.setSelected(rbtnFemenino.getModel(), true);
                 }
-                
+
                 btnEliminar.setEnabled(true);
-            }else{
-                JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            } else {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -564,8 +563,8 @@ public class Profesor extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        int eliminar = JOptionPane.showConfirmDialog(null,"¿Desea cerrar sesión?");
-        if(eliminar == 0){
+        int eliminar = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?");
+        if (eliminar == 0) {
             pro.Eliminar(cod);
             tabla_cargar();
             limpiar();
@@ -575,11 +574,19 @@ public class Profesor extends javax.swing.JDialog {
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
         tabla_cargar();
+        busDni.setText("");
+        busNombres.setText("");
+        busApellidos.setText("");
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
         tabla.setModel(pro.Buscar(busDni.getText(), busNombres.getText(), busApellidos.getText()));
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(70);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(50);
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(90);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
@@ -627,16 +634,21 @@ public class Profesor extends javax.swing.JDialog {
         });
     }
 
-    public void tabla_cargar(){
+    public void tabla_cargar() {
         tabla.setModel(pro.tabla());
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(70);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(50);
+        tabla.getColumnModel().getColumn(4).setPreferredWidth(90);
     }
-    
-    public void sexo(){
+
+    public void sexo() {
         groupSexo.add(rbtnMasculino);
         groupSexo.add(rbtnFemenino);
     }
-    
-    public boolean validar(){
+
+    public boolean validar() {
         dni = txtDni.getText();
         nom = txtNombres.getText();
         ape = txtApellidos.getText();
@@ -647,70 +659,117 @@ public class Profesor extends javax.swing.JDialog {
         esp = txtEspecialidad.getText();;
         pass = txtClave.getText();
         sex = "";
-  
-        String pattern  = "yyyy-MM-dd";
-        DateFormat formatter = new SimpleDateFormat(pattern);
-        fenac = formatter.format(datFenac.getDate());
+
+        try {
+            String pattern = "yyyy-MM-dd";
+            DateFormat formatter = new SimpleDateFormat(pattern);
+            fenac = formatter.format(datFenac.getDate());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Fecha Invalida");
+            return false;
+        }
         
         String grado_selecciona = cboGrado.getSelectedItem().toString();
-        
+
         int idGrado = grado_selecciona.indexOf(")");
         codGra = Integer.valueOf(grado_selecciona.substring(1, idGrado));
-        
-        if(rbtnMasculino.isSelected()){
+
+        if (rbtnMasculino.isSelected()) {
             sex = "MASCULINO";
-        }else if(rbtnFemenino.isSelected()){
+        } else if (rbtnFemenino.isSelected()) {
             sex = "FEMENINO";
         }
 
-        if(dni.equals("") || dni.length()!=8){
-            JOptionPane.showMessageDialog(null, "Dni incorrecto"); 
-            return false;
-        }else if(nom.equals("")){
-            JOptionPane.showMessageDialog(null, "Nombres incorrectos"); 
-            return false;
-        }else if(ape.equals("")){
-            JOptionPane.showMessageDialog(null, "Apellidos incorrectos"); 
-            return false;
-        }else if(tel.equals("")){
-            JOptionPane.showMessageDialog(null, "Telefono incorrecto"); 
-            return false;
-        }else if(fenac.equals("")){
-            JOptionPane.showMessageDialog(null, "Fecha de Nacimiento incorrecto"); 
-            return false;
-        }else if(direc.equals("")){
-            JOptionPane.showMessageDialog(null, "Dirección incorrecto"); 
-            return false;
-        }else if(email.equals("")){
-            JOptionPane.showMessageDialog(null, "Email incorrecto"); 
-            return false;
-        }else if(esp.equals("")){
-            JOptionPane.showMessageDialog(null, "Especialidad incorrecto"); 
-            return false;
-        }else if(sex.equals("")){
-            JOptionPane.showMessageDialog(null, "Sexo no seleccionado"); 
-            return false;
-        }else if(pass.equals("")){
-            JOptionPane.showMessageDialog(null, "Contraseña incorrecta"); 
-            return false;
-        }else if(datFenac.getDate() == null){
-            JOptionPane.showMessageDialog(null, "Fecha incorrecta"); 
+        if (dni.equals("") || dni.length() != 8 || dniIsNumero(dni)) {
+            System.err.println("Veamos si esta vacio");
+            JOptionPane.showMessageDialog(null, "Dni incorrecto");
             return false;
         }
+        if (cod == 0) {
+            if (pro.dni_validar(dni)) {
+                System.out.println("valida 1");
+                JOptionPane.showMessageDialog(null, "Dni Ya Registrado");
+                return false;
+            }
+        } else {
+            if (pro.dni_validar(dni)) {
+                System.out.println("valida 2");
+                if (!(dni.equals(pro.dni_obtener(cod)))) {
+                    System.out.println("Compara");
+                    if (pro.dni_validar(dni)) {
+                        System.out.println("valida 3");
+                        JOptionPane.showMessageDialog(null, "Dni Ya Registrado");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (nom.equals("")) {
+            JOptionPane.showMessageDialog(null, "Nombres incorrectos");
+            return false;
+        }
+
+        if (ape.equals("")) {
+            JOptionPane.showMessageDialog(null, "Apellidos incorrectos");
+            return false;
+        }
+
+        if (tel.equals("")) {
+            JOptionPane.showMessageDialog(null, "Telefono incorrecto");
+            return false;
+        }
+
+        if (sex.equals("")) {
+            JOptionPane.showMessageDialog(null, "Sexo no seleccionado");
+            return false;
+        }
+
+        if (fenac.equals("")) {
+            JOptionPane.showMessageDialog(null, "Fecha de Nacimiento incorrecto");
+            return false;
+        }
+
+        if (datFenac.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Fecha incorrecta");
+            return false;
+        }
+
+        if (direc.equals("")) {
+            JOptionPane.showMessageDialog(null, "Dirección incorrecto");
+            return false;
+        }
+
+        if (email.equals("")) {
+            JOptionPane.showMessageDialog(null, "Email incorrecto");
+            return false;
+        }
+
+        if (esp.equals("")) {
+            JOptionPane.showMessageDialog(null, "Especialidad incorrecto");
+            return false;
+        }
+
+        if (pass.equals("")) {
+            JOptionPane.showMessageDialog(null, "Contraseña incorrecta");
+            return false;
+        }
+
         return true;
     }
-    
-    public void grado(){
+
+    public void grado() {
         listaGrado = pro.grado();
         for (int i = 0; i < listaGrado.size(); i++) {
             cboGrado.addItem(listaGrado.get(i));
         }
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         cod = 0;
         dni = nom = ape = tel = direc = email = cargo = tip = pass = sex = fenac = est = "";
-    
+        validacion = false;
+
         txtDni.setText("");
         txtNombres.setText("");
         txtApellidos.setText("");
@@ -723,25 +782,35 @@ public class Profesor extends javax.swing.JDialog {
         txtClave.setText("");
         groupSexo.clearSelection();
         datFenac.setDate(new java.util.Date());
-        
+
         btnEliminar.setEnabled(false);
     }
-    
-    public void seleccionar_grado(){
+
+    public void seleccionar_grado() {
         grado();
         listaGrado = pro.grado();
         for (int i = 0; i < listaGrado.size(); i++) {
             int idGrado = listaGrado.get(i).indexOf(")");
             int cod = Integer.valueOf(listaGrado.get(i).substring(1, idGrado));
-            System.out.println("cod "+codGra);
-            if(codGra == cod){
+            System.out.println("cod " + codGra);
+            if (codGra == cod) {
                 cboGrado.setSelectedIndex(i);
                 break;
             }
             cboGrado.addItem(listaGrado.get(i));
         }
     }
-    
+
+    public boolean dniIsNumero(String dni) {
+        try {
+            long num = Long.valueOf(dni);
+            return false;
+        } catch (Exception e) {
+            return true;
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;

@@ -115,7 +115,6 @@ public class Matricula extends javax.swing.JDialog {
         btnEliminar = new javax.swing.JButton();
         btnNuevo = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
-        btnEliminar2 = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -262,6 +261,10 @@ public class Matricula extends javax.swing.JDialog {
 
         jLabel2.setText("DNI");
 
+        txtNombres.setEnabled(false);
+
+        txtApellidos.setEnabled(false);
+
         jLabel3.setText("Apellidos");
 
         jLabel10.setText("Fecha");
@@ -280,6 +283,7 @@ public class Matricula extends javax.swing.JDialog {
         jLabel4.setText("Costo");
 
         datFe.setDateFormatString("yyyy-MM-dd");
+        datFe.setEnabled(false);
 
         btnNuevoAlu.setText("Nuevo");
         btnNuevoAlu.addActionListener(new java.awt.event.ActionListener() {
@@ -400,13 +404,6 @@ public class Matricula extends javax.swing.JDialog {
             }
         });
 
-        btnEliminar2.setText("Actualizar");
-        btnEliminar2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminar2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -425,8 +422,6 @@ public class Matricula extends javax.swing.JDialog {
                                 .addComponent(btnNuevo)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEliminar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEliminar2)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtApoderado, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
@@ -460,8 +455,7 @@ public class Matricula extends javax.swing.JDialog {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardar)
                     .addComponent(btnNuevo)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnEliminar2))
+                    .addComponent(btnEliminar))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -609,6 +603,11 @@ public class Matricula extends javax.swing.JDialog {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
+        busDni.setText("");
+        busNombres.setText("");
+        busApellidos.setText("");
+        datFeIni.setDate(new java.util.Date());
+        datFeFin.setDate(new java.util.Date());  
         tabla_cargar();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
@@ -619,6 +618,10 @@ public class Matricula extends javax.swing.JDialog {
         String ini = formatter.format(datFeIni.getDate());
         String fin = formatter.format(datFeFin.getDate());
         tabla.setModel(mat.Buscar(busDni.getText(), busNombres.getText(), busApellidos.getText(),ini,fin));
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(50);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(120);
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void busAlumnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busAlumnoActionPerformed
@@ -630,7 +633,13 @@ public class Matricula extends javax.swing.JDialog {
             codAlu = Integer.valueOf(datosMat[0]);
             txtNombres.setText(datosMat[2]);
             txtApellidos.setText(datosMat[3]);
+        }else{
+            codAlu = 0;
+            txtNombres.setText("");
+            txtApellidos.setText("");
+            JOptionPane.showMessageDialog(null, "No existes Alumno con ese DNI");
         }
+        
     }//GEN-LAST:event_busAlumnoActionPerformed
 
     private void btnNuevoAluActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoAluActionPerformed
@@ -640,11 +649,6 @@ public class Matricula extends javax.swing.JDialog {
         alu.setTitle("Alumno");
         alu.setVisible(true);
     }//GEN-LAST:event_btnNuevoAluActionPerformed
-
-    private void btnEliminar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar2ActionPerformed
-        // TODO add your handling code here:
-        grado();
-    }//GEN-LAST:event_btnEliminar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -695,6 +699,10 @@ public class Matricula extends javax.swing.JDialog {
         String ini = formatter.format(datFeIni.getDate());
         String fin = formatter.format(datFeFin.getDate());
         tabla.setModel(mat.tabla(ini,fin));
+        tabla.getColumnModel().getColumn(0).setPreferredWidth(5);
+        tabla.getColumnModel().getColumn(1).setPreferredWidth(50);
+        tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
+        tabla.getColumnModel().getColumn(3).setPreferredWidth(120);
     }
     
     public boolean validar(){
@@ -720,31 +728,33 @@ public class Matricula extends javax.swing.JDialog {
         if(dni.equals("")|| dni.length()!=8){
             JOptionPane.showMessageDialog(null, "Dni incorrecto"); 
             return false;
-        }else if(nom.equals("")){
-            JOptionPane.showMessageDialog(null, "Nombres incorrectos"); 
-            return false;
-        }else if(ape.equals("")){
-            JOptionPane.showMessageDialog(null, "Apellidos incorrectos"); 
-            return false;
-        }else if(cos.equals("")){
-            JOptionPane.showMessageDialog(null, "Costo incorrecto"); 
-            return false;
-        }else if(apo.equals("")){
-            JOptionPane.showMessageDialog(null, "Apoderado incorrecto"); 
-            return false;
-        }else if(ocu.equals("")){
-            JOptionPane.showMessageDialog(null, "Ocupacion incorrecto"); 
-            return false;
-        }else if(vin.equals("")){
-            JOptionPane.showMessageDialog(null, "Vinculo incorrecto"); 
-            return false;
-        }else if(datFe.getDate() == null){
-            JOptionPane.showMessageDialog(null, "Fecha incorrecta"); 
-            return false;
-        }else if(codAlu == 0){
-            JOptionPane.showMessageDialog(null, "Alumno No registrado"); 
+        }
+        
+        if(codAlu == 0){
+            JOptionPane.showMessageDialog(null, "Alumno No registrado, ingrese DNI y aprete buscar"); 
             return false;
         }
+        
+        if(cos.equals("")){
+            JOptionPane.showMessageDialog(null, "Costo incorrecto"); 
+            return false;
+        }
+        
+        if(apo.equals("")){
+            JOptionPane.showMessageDialog(null, "Apoderado incorrecto"); 
+            return false;
+        }
+        
+        if(ocu.equals("")){
+            JOptionPane.showMessageDialog(null, "Ocupacion incorrecto"); 
+            return false;
+        }
+        
+        if(vin.equals("")){
+            JOptionPane.showMessageDialog(null, "Vinculo incorrecto"); 
+            return false;
+        }
+        
         return true;
     }
     
@@ -793,7 +803,6 @@ public class Matricula extends javax.swing.JDialog {
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
-    private javax.swing.JButton btnEliminar2;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;

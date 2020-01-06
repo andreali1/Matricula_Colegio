@@ -1,0 +1,8 @@
+@echo off
+c:
+cd /
+IF NOT EXIST POSTGRESQL MKDIR POSTGRESQL
+cd POSTGRESQL
+IF NOT EXIST Restore MKDIR Restore
+explorer.exe C:\POSTGRESQL\Restore
+exit

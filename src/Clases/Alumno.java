@@ -190,7 +190,47 @@ public class Alumno {
         }
         return modelo;
     }
-
+    
+    public boolean dni_validar(String num){ 
+        try
+        {   
+            Instruccion = conexion.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Registro = Instruccion.executeQuery("SELECT count(*) cant from Alumnos WHERE Dni =\'"+num+"\'" );
+            Registro.next();
+            int cant = Registro.getInt("cant"); 
+            if(cant == 0){ 
+                return false; 
+            }else{
+                return true; 
+            }
+        }
+        catch(Exception X){ 
+            System.out.println(X.getMessage()); 
+            return false;
+        }
+    }
+    
+    public String dni_obtener(int cod){ 
+        try
+        {   
+            Instruccion = conexion.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+            Registro = Instruccion.executeQuery("SELECT coalesce(Dni, '') Dni from Alumnos WHERE Id_Alumno =\'"+cod+"\'" );
+            Registro.next();
+            String nroDni = Registro.getString("Dni"); 
+            System.out.println("dni "+ nroDni);
+            if(nroDni.equals("")){ 
+                return ""; 
+            }else{
+                return nroDni; 
+            }
+        }
+        catch(Exception X){ 
+            System.out.println(X.getMessage()); 
+            return "";
+        }
+    }
+  
+    
     public void Insertar(){
         try {
             System.err.println("INSERTAR");

@@ -16,9 +16,12 @@ public class Adminstrador extends javax.swing.JFrame {
     /**
      * Creates new form Adminstrador
      */
+    Clases.Sistema sis = null;
+
     public Adminstrador() {
         initComponents();
         this.setLocationRelativeTo(null);
+        sis = new Clases.Sistema();
     }
 
     /**
@@ -38,6 +41,7 @@ public class Adminstrador extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         btnSalir = new javax.swing.JButton();
         btnReporte = new javax.swing.JButton();
+        btnSistema = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 102, 102));
@@ -96,6 +100,15 @@ public class Adminstrador extends javax.swing.JFrame {
             }
         });
 
+        btnSistema.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSistema.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/imac (1).png"))); // NOI18N
+        btnSistema.setText("   Sistema");
+        btnSistema.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSistemaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -112,8 +125,9 @@ public class Adminstrador extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnGrados, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 275, Short.MAX_VALUE)
+                            .addComponent(btnReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSistema, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
@@ -141,8 +155,10 @@ public class Adminstrador extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnReporte)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSistema)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnSalir)))
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1);
@@ -152,16 +168,22 @@ public class Adminstrador extends javax.swing.JFrame {
 
     private void btnPostulanteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPostulanteActionPerformed
         // TODO add your handling code here:
-        Alumno alu = new Alumno(this,true);
-        alu.setLocationRelativeTo(null);
-        alu.setTitle("Alumno");
-        alu.setVisible(true);
+        if (sis.existe_tablas()) {
+            Alumno alu = new Alumno(this, true);
+            alu.setLocationRelativeTo(null);
+            alu.setTitle("Alumno");
+            alu.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "El sistema no tiene datos a mostrar, por favor restaure backup");
+            abrir_sistema();
+        }
+
     }//GEN-LAST:event_btnPostulanteActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         // TODO add your handling code here:
-        int salir = JOptionPane.showConfirmDialog(null,"¿Desea cerrar sesión?");
-        if(salir==0){
+        int salir = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?");
+        if (salir == 0) {
             Login login = new Login();
             setVisible(false);
             login.setVisible(true);
@@ -170,32 +192,54 @@ public class Adminstrador extends javax.swing.JFrame {
 
     private void btnAreaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAreaActionPerformed
         // TODO add your handling code here:
-        AreaAcademica usu = new AreaAcademica(this,true);
-        usu.setLocationRelativeTo(null);
-        usu.setTitle("Área Académica");
-        usu.setVisible(true);
+
+        if (sis.existe_tablas()) {
+            AreaAcademica usu = new AreaAcademica(this, true);
+            usu.setLocationRelativeTo(null);
+            usu.setTitle("Área Académica");
+            usu.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "El sistema no tiene datos a mostrar, por favor restaure backup");
+            abrir_sistema();
+        }
     }//GEN-LAST:event_btnAreaActionPerformed
 
     private void btnGradosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGradosActionPerformed
         // TODO add your handling code here:
-        Grado gra = new Grado(this,true);
-        gra.setLocationRelativeTo(null);
-        gra.setTitle("Grado");
-        gra.setVisible(true);
-        
+
+        if (sis.existe_tablas()) {
+            Grado gra = new Grado(this, true);
+            gra.setLocationRelativeTo(null);
+            gra.setTitle("Grado");
+            gra.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "El sistema no tiene datos a mostrar, por favor restaure backup");
+            abrir_sistema();
+        }
     }//GEN-LAST:event_btnGradosActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
         // TODO add your handling code here:
-        Reporte rep = new Reporte(this,true);
-        rep.setLocationRelativeTo(null);
-        rep.setTitle("Reporte");
-        rep.setVisible(true);
+        
+        if (sis.existe_tablas()) {
+            Reporte rep = new Reporte(this, true);
+            rep.setLocationRelativeTo(null);
+            rep.setTitle("Reporte");
+            rep.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "El sistema no tiene datos a mostrar, por favor restaure backup");
+            abrir_sistema();
+        }
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void btnUsuario1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsuario1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnUsuario1ActionPerformed
+
+    private void btnSistemaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSistemaActionPerformed
+        // TODO add your handling code here:
+        abrir_sistema();
+    }//GEN-LAST:event_btnSistemaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -232,12 +276,20 @@ public class Adminstrador extends javax.swing.JFrame {
         });
     }
 
+    public void abrir_sistema() {
+        Sistema sis = new Sistema(this, true);
+        sis.setLocationRelativeTo(null);
+        sis.setTitle("Sistema");
+        sis.setVisible(true);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnArea;
     private javax.swing.JButton btnGrados;
     private javax.swing.JButton btnPostulante;
     private javax.swing.JButton btnReporte;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton btnSistema;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

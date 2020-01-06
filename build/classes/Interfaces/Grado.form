@@ -373,6 +373,9 @@
               </Events>
             </Component>
             <Component class="javax.swing.JSpinner" name="spPiso">
+              <Properties>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+              </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtGrado">
             </Component>

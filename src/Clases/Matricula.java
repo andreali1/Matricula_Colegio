@@ -232,6 +232,7 @@ public class Matricula {
     }
     
     public DefaultTableModel Buscar_Matricula(String aDni,String aNom,String aApe,String fechaIni,String fechaFin,String pDni,String pNom,String pApe){
+        System.err.println("Dni "+aDni);
         Arrays.fill(datos, "");
         DefaultTableModel modelo= new DefaultTableModel(){
             @Override
@@ -241,23 +242,21 @@ public class Matricula {
         };
         try {
             modelo.addColumn("Id");
-            modelo.addColumn("Dni");
             modelo.addColumn("Alumno");
             modelo.addColumn("Apoderado");
             modelo.addColumn("Fecha");
             modelo.addColumn("Profesor");
             modelo.addColumn("Grado");
             Instruccion = conexion.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            Registro = Instruccion.executeQuery("SELECT m.Id_Matricula, a.Apellidos ape,a.Nombres nom,p.Dni,p.Apellidos,p.Nombres, a.Dni,m.Apoderado,m.Fecha,m.Costo,g.Grado FROM Matricula m INNER JOIN Alumnos a ON m.Id_Alumno = a.Id_Alumno LEFT JOIN Grado g ON g.Id_Grado = m.Id_Grado INNER JOIN Profesores p ON p.Id_Grado = g.Id_Grado WHERE LOWER(a.Dni) LIKE LOWER('%"+aDni+"%') and LOWER(a.Nombres) LIKE LOWER('%"+aNom+"%') and LOWER(p.Dni) LIKE LOWER('%"+pDni+"%') and LOWER(p.Nombres) LIKE LOWER('%"+pNom+"%') and LOWER(a.Apellidos) LIKE LOWER('%"+aApe+"%') and LOWER(p.Apellidos) LIKE LOWER('%"+pApe+"%') and m.Fecha >=\'"+fechaIni+"\' and m.Fecha <=\'"+fechaFin+"\'" );
+            Registro = Instruccion.executeQuery("SELECT m.Id_Matricula,a.Dni aluDni,a.Apellidos aluApe,a.Nombres aluNom,p.Dni,p.Apellidos,p.Nombres, a.Dni,m.Apoderado,m.Fecha,m.Costo,g.Grado FROM Matricula m LEFT JOIN Alumnos a ON m.Id_Alumno = a.Id_Alumno LEFT JOIN Grado g ON g.Id_Grado = m.Id_Grado INNER JOIN Profesores p ON p.Id_Grado = g.Id_Grado WHERE LOWER(a.Dni) LIKE LOWER('%"+aDni+"%') and LOWER(a.Nombres) LIKE LOWER('%"+aNom+"%') and LOWER(p.Dni) LIKE LOWER('%"+pDni+"%') and LOWER(p.Nombres) LIKE LOWER('%"+pNom+"%') and LOWER(a.Apellidos) LIKE LOWER('%"+aApe+"%') and LOWER(p.Apellidos) LIKE LOWER('%"+pApe+"%') and m.Fecha >=\'"+fechaIni+"\' and m.Fecha <=\'"+fechaFin+"\'" );
             while(Registro.next())
             {
                 datos[0]= Registro.getString("Id_Matricula");
-                datos[1]= Registro.getString("Dni");
-                datos[2]= Registro.getString("ape") + " " + Registro.getString("nom");
-                datos[3]= Registro.getString("Apoderado");
-                datos[4]= Registro.getString("Fecha");
-                datos[5]= Registro.getString("Apellidos") + " " + Registro.getString("Nombres");
-                datos[6]= Registro.getString("Grado");
+                datos[1]= "("+Registro.getString("aluDni")+") "+Registro.getString("aluApe") + " " + Registro.getString("aluNom");
+                datos[2]= Registro.getString("Apoderado");
+                datos[3]= Registro.getString("Fecha");
+                datos[4]= "("+Registro.getString("Dni")+") "+Registro.getString("Apellidos") + " " + Registro.getString("Nombres");
+                datos[5]= Registro.getString("Grado");
                 modelo.addRow(datos);
             }
         } catch (SQLException ex) {
@@ -277,7 +276,7 @@ public class Matricula {
         try {
             modelo.addColumn("Monto");
             Instruccion = conexion.con.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
-            Registro = Instruccion.executeQuery("SELECT sum(m.Costo) Monto FROM Matricula m WHERE m.Fecha >=\'"+fechaIni+"\' and m.Fecha <=\'"+fechaFin+"\'" );
+            Registro = Instruccion.executeQuery("SELECT coalesce(sum(m.Costo),0)  Monto FROM Matricula m WHERE m.Fecha >=\'"+fechaIni+"\' and m.Fecha <=\'"+fechaFin+"\'" );
             while(Registro.next())
             {
                 datos[0]= "S/. "+Registro.getString("Monto");

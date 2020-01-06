@@ -20,12 +20,11 @@ public class Grado extends javax.swing.JDialog {
     /**
      * Creates new form AreaAcademica
      */
-    
-    int cod,piso;
+    int cod, piso;
     String pabellon, grado;
     boolean validacion;
-    String []datosGrado = null;
-    
+    String[] datosGrado = null;
+
     Clases.Grado gra = null;
 
     public Grado() {
@@ -35,17 +34,17 @@ public class Grado extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         // Incializar variables
         cod = piso = 0;
         pabellon = grado = "";
         datosGrado = new String[4];
-        
+
         // Instacias
         gra = new Clases.Grado();
-        
+
         // Funciones
-        tabla_cargar();   
+        tabla_cargar();
     }
 
     /**
@@ -228,6 +227,8 @@ public class Grado extends javax.swing.JDialog {
             }
         });
 
+        spPiso.setToolTipText("");
+
         jLabel3.setText("Grado");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -328,22 +329,22 @@ public class Grado extends javax.swing.JDialog {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         validacion = validar();
-        if(validacion){
+        if (validacion) {
             gra.setIdGrado(cod);
             gra.setPabellon(pabellon);
             gra.setPiso(String.valueOf(piso));
             gra.setGrado(grado);
-            
-            if(cod == 0){
+
+            if (cod == 0) {
                 gra.Insertar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
-            }else{
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
+            } else {
                 gra.Modificar();
                 tabla_cargar();
                 limpiar();
-                JOptionPane.showMessageDialog(null,"Registro Guardado");
+                JOptionPane.showMessageDialog(null, "Registro Guardado");
             }
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -352,25 +353,25 @@ public class Grado extends javax.swing.JDialog {
         // TODO add your handling code here:
         try {
             int fila = tabla.getSelectedRow();
-            
-            if(fila!=-1){
-                
+
+            if (fila != -1) {
+
                 limpiar();
-                
+
                 cod = Integer.valueOf(tabla.getValueAt(fila, 0).toString());
                 datosGrado = gra.Obtener(cod);
-                
+
                 txtPabellon.setText(datosGrado[0]);
                 txtGrado.setText(datosGrado[2]);
-                System.out.println("piso "+datosGrado[1]);
+                System.out.println("piso " + datosGrado[1]);
                 spPiso.setValue(Integer.valueOf(datosGrado[1]));
-                
+
                 btnEliminar.setEnabled(true);
-            }else{
-                JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            } else {
+                JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null,"No ha seleccionado ningun registro");
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun registro");
             System.err.println(e.getMessage());
         }
     }//GEN-LAST:event_btnModificarActionPerformed
@@ -382,8 +383,8 @@ public class Grado extends javax.swing.JDialog {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-        int eliminar = JOptionPane.showConfirmDialog(null,"¿Desea cerrar sesión?");
-        if(eliminar == 0){
+        int eliminar = JOptionPane.showConfirmDialog(null, "¿Desea cerrar sesión?");
+        if (eliminar == 0) {
             gra.Eliminar(cod);
             tabla_cargar();
             limpiar();
@@ -393,6 +394,9 @@ public class Grado extends javax.swing.JDialog {
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         // TODO add your handling code here:
         tabla_cargar();
+        busPiso.setText("");
+        busPabellon.setText("");
+        busGrado.setText("");
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -443,41 +447,40 @@ public class Grado extends javax.swing.JDialog {
         });
     }
 
-    public void tabla_cargar(){
+    public void tabla_cargar() {
         tabla.setModel(gra.tabla());
     }
-    
-    
-    public boolean validar(){
+
+    public boolean validar() {
         pabellon = txtPabellon.getText();
         grado = txtGrado.getText();
         piso = Integer.valueOf(spPiso.getValue().toString());
 
-        if(pabellon.equals("")){
-            JOptionPane.showMessageDialog(null, "Pabellón incorrecto"); 
+        if (pabellon.equals("")) {
+            JOptionPane.showMessageDialog(null, "Pabellón incorrecto");
             return false;
-        }else if(piso == 0){
-            JOptionPane.showMessageDialog(null, "Piso incorrectos"); 
+        } else if (piso <= 0) {
+            JOptionPane.showMessageDialog(null, "Piso incorrectos");
             return false;
-        }else if(grado.equals("")){
-            JOptionPane.showMessageDialog(null, "Grado incorrectos"); 
+        } else if (grado.equals("")) {
+            JOptionPane.showMessageDialog(null, "Grado incorrectos");
             return false;
         }
         return true;
     }
-    
-    public void limpiar(){
+
+    public void limpiar() {
         cod = piso = 0;
         pabellon = "";
         grado = "";
-    
+
         txtPabellon.setText("");
         txtGrado.setText("");
         spPiso.setValue(0);
-        
+
         btnEliminar.setEnabled(false);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
